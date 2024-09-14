@@ -1,0 +1,7 @@
+[build]
+  functions = "back-end/functions"  # Ruta correcta hacia las funciones dentro de la carpeta 'back-end'
+
+[dev]
+  functions = "back-end/functions"
+  command = "npm start"
+  port = 8888
