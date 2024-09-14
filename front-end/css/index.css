@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('../resources/index_background.jpg');
+    background-size: auto 100%; /* Mantén la altura completa y ajusta el ancho según sea necesario */
+    background-repeat: no-repeat;
+    background-position: left center; /* Comienza la imagen desde la izquierda */
+    animation: backgroundScroll 20s linear infinite; /* Aplica la animación */
+    color: #333;
+    height: 100vh;
+}
+
+header {
+    background-color: white;
+    padding: 20px 0;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    max-width: 100%;
+    margin: 0;
+}
+
+.header-container h1 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-left: 10px;
+}
+
+.header-container button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.header-container button:hover {
+    background-color: #444;
+}
+
+.info-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+    padding-left: 30px; /* Ajusta el margen izquierdo */
+}
+
+.info-box {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    max-width: 700px;
+    border-radius: 10px;
+}
+
+.info-box h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.info-box p {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    body {
+        animation: backgroundScroll 40s linear infinite; /* Hace la animación más lenta en móviles */
+    }
+
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 0 10px;
+    }
+
+    .header-container h1 {
+        margin-bottom: 10px;
+        margin-left: 0;
+    }
+
+    .header-container button {
+        margin-right: 0;
+    }
+
+    .info-section {
+        padding-left: 30px; /* Ajuste del padding-left en móviles */
+    }
+
+    .info-box {
+        padding: 20px;
+        margin: 10px;
+        max-width: 100%;
+    }
+
+    .info-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .info-box p {
+        font-size: 1rem;
+    }
+}
+
+/* Animación de desplazamiento de la imagen de fondo */
+@keyframes backgroundScroll {
+    0% {
+        background-position: left center;
+    }
+    50% {
+        background-position: right center;
+    }
+    100% {
+        background-position: left center;
+    }
+}

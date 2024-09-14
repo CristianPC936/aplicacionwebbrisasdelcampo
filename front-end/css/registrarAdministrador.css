@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    overflow-x: hidden;
+}
+
+header.top-bar {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header.top-bar h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: row;
+}
+
+.sidebar {
+    background-color: #ffffff;
+    padding: 20px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-right: 1px solid #ddd;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, width 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+    opacity: 0;
+    width: 0;
+}
+
+.sidebar img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sidebar h2 {
+    text-align: left;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    width: 100%;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.sidebar nav ul li {
+    margin-bottom: 10px;
+    font-weight: bold;
+    padding-left: 0;
+}
+
+.sidebar nav ul ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    font-weight: normal;
+}
+
+.sidebar nav ul ul li {
+    font-weight: normal;
+}
+
+.sidebar nav ul ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.sidebar nav ul ul li a:hover {
+    background-color: #ddd;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 20px;
+    min-height: 100vh;
+    width: calc(100% - 250px);
+    transition: width 0.3s ease;
+}
+
+.sidebar.hidden + .main-content {
+    width: 100%;
+}
+
+/* Distribución de tres columnas en pantallas grandes */
+.register-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas iguales */
+    gap: 15px; /* Espaciado entre los elementos */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Botón colocado en una nueva fila en pantallas grandes */
+.register-button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: auto; /* No ocupa todo el ancho */
+    grid-column: 1 / -1; /* El botón ocupa una fila completa debajo de las opciones del formulario */
+    justify-self: start; /* Mantener el botón alineado a la izquierda */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.nav-toggle {
+    background-color: #ffffff;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 0 0 10px 0;
+    border-radius: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-toggle:focus {
+    outline: none;
+}
+
+/* Ajustes para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .register-form {
+        grid-template-columns: 1fr; /* Cambiar a una sola columna en móviles */
+        gap: 10px; /* Reducir el espacio entre los elementos */
+        padding: 15px; /* Ajustar padding para móviles */
+    }
+
+    .input-group {
+        margin-bottom: 5px; /* Reducir margen inferior */
+    }
+
+    input, select {
+        padding: 6px;
+        font-size: 1em;
+    }
+
+    .register-button {
+        grid-column: span 1; /* Botón ocupa una columna en móviles */
+        width: 100%; /* Asegura que el botón ocupe todo el ancho disponible en móviles */
+        padding: 10px;
+        margin-top: 10px;
+    }
+}

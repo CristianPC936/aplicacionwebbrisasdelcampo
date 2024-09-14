@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brisas del Campo - Gestión de Administradores</title>
+    <link rel="stylesheet" href="../css/gestionAdministradores.css">
+</head>
+<body>
+    <header class="top-bar">
+        <h1>Gestión de Administradores</h1>
+    </header>
+    <div class="container">
+        <aside class="sidebar">
+            <img src="../resources/school_icon.png" alt="EORM Brisas del Campo">
+            <h2>Brisas del Campo</h2>
+            <nav>
+                <ul>
+                    <li>Gestión de Asistencia</li>
+                    <ul>
+                        <li><a href="registrarAsistencia.html">Registrar</a></li>
+                        <li><a href="listadoYEdicionAsistencia.html">Listar o Editar</a></li>
+                        <li><a href="reporteAsistencia.html">Generar reportes</a></li>
+                    </ul>
+                    <li>Gestión de Notas</li>
+                    <ul>
+                        <li><a href="registrarNotas.html">Registrar</a></li>
+                        <li><a href="listadoYEdicionNotas.html">Listar o Editar</a></li>
+                    </ul>
+                    <li>Gestión de Usuarios y Docentes</li>
+                    <ul>
+                        <li><a href="gestionEstudiantes.html">Gestión de Estudiantes</a></li>
+                        <li><a href="gestionDocentes.html">Gestión de Docentes</a></li>
+                        <li><a href="gestionAdministradores.html">Gestión de Administradores</a></li>
+                    </ul>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <!-- Botón de navegación -->
+            <button class="nav-toggle" id="nav-toggle">
+                &#9776;
+            </button>
+
+            <div class="admin-management">
+                <div class="admin-option">
+                    <a href="registrarAdministrador.html"><img src="../resources/adminC.png" alt="Registrar Administrador"></a>
+                </div>
+                <div class="admin-option">
+                    <a href="buscarEditarEliminarAdministrador.html"><img src="../resources/adminRUD.png" alt="Buscar/Editar/Eliminar Administrador"></a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/gestionAdministradores.js"></script> <!-- Ruta actualizada -->
+</body>
+</html>

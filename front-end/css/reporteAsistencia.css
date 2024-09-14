@@ -1,0 +1,219 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background: url('../resources/your_background_image.jpg') no-repeat center center fixed;
+    background-size: cover;
+    overflow-x: hidden; /* Evitar scroll horizontal cuando el aside esté oculto */
+}
+
+header.top-bar {
+    background-color: #ffffff; /* Color de fondo completamente opaco */
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header.top-bar h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: row; /* Mantener aside y main en línea */
+}
+
+.sidebar {
+    background-color: #ffffff; /* Color de fondo completamente opaco */
+    padding: 20px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinear todo el contenido hacia la izquierda */
+    border-right: 1px solid #ddd; /* Opcional, para dividir el sidebar del contenido */
+    flex-shrink: 0; /* Evitar que el aside se reduzca */
+    transition: transform 0.3s ease, width 0.3s ease, opacity 0.3s ease; /* Transición suave para el desplazamiento y opacidad */
+    overflow: hidden; /* Ocultar cualquier contenido desbordante */
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%); /* Mover el aside fuera de la vista hacia la izquierda */
+    opacity: 0; /* Ocultar el contenido del aside */
+    width: 0; /* Ocultar el ancho del aside */
+}
+
+.sidebar img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 30px; /* Aumentar el espacio inferior del icono */
+    display: block;
+    margin-left: auto;
+    margin-right: auto; /* Centrar la imagen en el aside */
+}
+
+.sidebar h2 {
+    text-align: left; /* Alinear el título a la izquierda */
+    margin-bottom: 20px;
+    margin-top: 10px; /* Añadir margen superior al título */
+    font-weight: bold; /* Título en negrita */
+}
+
+.sidebar nav ul {
+    list-style: none;
+    width: 100%;
+    padding-left: 0; /* Eliminar padding predeterminado */
+    margin-top: 10px; /* Añadir margen superior a la lista */
+}
+
+.sidebar nav ul li {
+    margin-bottom: 10px;
+    font-weight: bold; /* Asegurar que los títulos estén en negrita */
+    padding-left: 0; /* Alinear los títulos principales hacia la izquierda */
+}
+
+.sidebar nav ul ul {
+    margin-left: 20px; /* Tabulación para los subelementos */
+    margin-bottom: 20px;
+    font-weight: normal; /* Los enlaces no deben estar en negrita */
+}
+
+.sidebar nav ul ul li {
+    font-weight: normal;
+}
+
+.sidebar nav ul ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.sidebar nav ul ul li a:hover {
+    background-color: #ddd;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Cambiado de 'center' a 'flex-start' para mover contenido arriba */
+    align-items: flex-start;
+    padding-left: 30px; /* Ajuste para mover el contenido hacia la derecha */
+    padding-right: 30px; /* Agregar padding a la derecha para espacio en pantallas grandes */
+    padding-top: 20px; /* Ajuste para mover el contenido más arriba */
+    min-height: 100vh; /* Asegura que el fondo ocupe toda la altura de la pantalla */
+    width: calc(100% - 250px); /* Restar el ancho del aside */
+    transition: width 0.3s ease; /* Transición suave cuando el main cambia de tamaño */
+}
+
+.sidebar.hidden + .main-content {
+    width: 100%; /* Ocupa todo el espacio disponible cuando el aside está oculto */
+}
+
+.parameters-container {
+    width: 100%;
+    max-width: 1200px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between; /* Distribuir los elementos con espacio entre ellos */
+    align-items: center; /* Centra verticalmente todos los elementos */
+    gap: 20px; /* Añade espacio entre los elementos */
+}
+
+.parameters-container .parameter {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 20px;
+}
+
+.parameters-container label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.parameters-container select, 
+.parameters-container input[type="date"] {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%; /* Ancho completo para que sea responsive */
+}
+
+.generate-button {
+    padding: 15px 30px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center; /* Asegura que el botón esté centrado verticalmente */
+}
+
+/* Botón de navegación */
+.nav-toggle {
+    background-color: #ffffff;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    padding: 5px 10px; /* Reducir el padding para minimizar el espacio superior e inferior */
+    margin: 0 0 10px 0; /* Reducido el margen superior para mover el botón más arriba */
+    border-radius: 15px; /* Suavizar los bordes del botón */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: block; /* Siempre visible */
+}
+
+.nav-toggle:focus {
+    outline: none;
+}
+
+/* Ajustes para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: row; /* Mantener aside y main en línea */
+        flex-wrap: nowrap; /* Evitar que el main se desplace debajo del aside */
+    }
+
+    .sidebar {
+        width: 250px; /* Mantener el ancho del aside */
+        padding: 10px;
+        flex-shrink: 0; /* Mantener el ancho fijo del aside */
+    }
+
+    .main-content {
+        padding-left: 20px; /* Desplazamiento reducido en pantallas pequeñas */
+        padding-right: 20px;
+        padding-top: 10px; /* Ajuste para mover el contenido más arriba en pantallas pequeñas */
+        width: calc(100% - 250px); /* Mantener el main al lado del aside */
+    }
+
+    .parameters-container {
+        flex-direction: column; /* Cambiar a columna para pantallas pequeñas */
+        align-items: flex-start; /* Alinear al inicio para pantallas pequeñas */
+    }
+
+    .parameters-container .parameter,
+    .parameters-container select,
+    .parameters-container input[type="date"] {
+        width: 100%; /* Asegura que todos los inputs y selects tengan el mismo ancho */
+    }
+
+    .generate-button {
+        width: 100%; /* Asegura que el botón tome todo el ancho */
+        margin-top: 20px;
+    }
+}
