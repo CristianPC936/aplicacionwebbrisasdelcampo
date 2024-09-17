@@ -9,5 +9,4 @@ public class ControlDeNotasYAsistenciaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ControlDeNotasYAsistenciaApplication.class, args);
 	}
-
 }
