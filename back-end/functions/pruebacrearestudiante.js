@@ -1,42 +1,37 @@
 const mysql = require('mysql');
-const connection = mysql.createConnection({
-    host: 'fdb1029.awardspace.net',
-    user: '4529799_proyectograduacion',
-    password: 'y)JdX@_u3y%;MCwa',
-    database: '4529799_proyectograduacion'
-});
+
 exports.handler = async (event, context) => {
-    const { nombre, apellido, edad, grado } = JSON.parse(event.body);
-    if (!nombre || !apellido || !edad || !grado) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ error: 'Todos los campos son obligatorios' })
-        };
-    }
-    const query = 'INSERT INTO estudiantes (nombre, apellido, edad, grado, fecha_registro) VALUES (?, ?, ?, ?, NOW())';
+    const connection = mysql.createConnection({
+        host: 'serveo.net',
+        user: 'root',
+        password: '',
+        database: 'pruebaproyecto',
+        port: 13306
+    });
+
+    const { primerNombre, segundoNombre, tercerNombre, primerApellido, segundoApellido, claveAlumno, idGrado, idSeccion, cicloEscolar } = JSON.parse(event.body);
+
+    const query = `
+        INSERT INTO alumno (primerNombre, segundoNombre, tercerNombre, primerApellido, segundoApellido, claveAlumno, idGrado, idSeccion, cicloEscolar)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [primerNombre, segundoNombre, tercerNombre, primerApellido, segundoApellido, claveAlumno, idGrado, idSeccion, cicloEscolar];
+
     return new Promise((resolve, reject) => {
-        connection.connect(err => {
-            if (err) {
+        connection.query(query, values, (error, results) => {
+            if (error) {
                 reject({
                     statusCode: 500,
-                    body: JSON.stringify({ error: 'Error de conexión a la base de datos' })
+                    body: JSON.stringify({ message: 'Error inserting data', error: error.message })
                 });
-                return;
+            } else {
+                resolve({
+                    statusCode: 200,
+                    body: JSON.stringify({ message: 'Alumno inserted successfully', id: results.insertId })
+                });
             }
-            connection.query(query, [nombre, apellido, edad, grado], (error, results) => {
-                if (error) {
-                    reject({
-                        statusCode: 500,
-                        body: JSON.stringify({ error: 'Error al insertar el estudiante' })
-                    });
-                } else {
-                    resolve({
-                        statusCode: 200,
-                        body: JSON.stringify({ message: 'Estudiante registrado exitosamente', estudianteId: results.insertId })
-                    });
-                }
-                connection.end();
-            });
         });
+        connection.end();
     });
 };
