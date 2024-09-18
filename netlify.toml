@@ -4,3 +4,7 @@
 
 [dev]
   functions = "back-end/functions"
+
+[functions]
+node_bundler = "esbuild"
+timeout = 30  # Aumenta el tiempo a 30 segundos (valor máximo permitido por Netlify)
