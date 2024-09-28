@@ -23,7 +23,7 @@ exports.handler = async (event, context) => {
 
   // Consulta SQL para obtener la asistencia filtrada
   const sql = `
-    SELECT a.primerNombre, a.segundoNombre, a.tercerNombre, a.primerApellido, a.segundoApellido, at.idtipoAsistencia
+    SELECT at.idAsistencia, a.primerNombre, a.segundoNombre, a.tercerNombre, a.primerApellido, a.segundoApellido, a.claveAlumno, at.idtipoAsistencia
     FROM Alumno a
     INNER JOIN Asistencia at ON a.idAlumno = at.idAlumno
     WHERE a.idGrado = ? AND a.idSeccion = ? AND at.fecha = ?

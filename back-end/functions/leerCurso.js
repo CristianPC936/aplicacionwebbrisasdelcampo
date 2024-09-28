@@ -10,12 +10,28 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
-  // Consulta SQL para obtener los cursos
-  const sql = 'SELECT idCurso, nombreCurso FROM curso';
+  // Obtener el parámetro idGrado de la solicitud
+  const { idGrado } = event.queryStringParameters;
+
+  // Verificar que idGrado esté presente
+  if (!idGrado) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'El parámetro idGrado es necesario' })
+    };
+  }
+
+  // Consulta SQL para obtener los cursos correspondientes al idGrado
+  const sql = `
+    SELECT c.idCurso, c.nombreCurso
+    FROM curso c
+    INNER JOIN grado_has_curso ghc ON c.idCurso = ghc.idCurso
+    WHERE ghc.idGrado = ?
+  `;
 
   // Retornar una promesa para manejar la consulta de manera asíncrona
   return new Promise((resolve, reject) => {
-    connection.query(sql, (error, results) => {
+    connection.query(sql, [idGrado], (error, results) => {
       if (error) {
         reject({
           statusCode: 500,
