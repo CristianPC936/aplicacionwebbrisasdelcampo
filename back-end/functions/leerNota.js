@@ -23,7 +23,7 @@ exports.handler = async (event, context) => {
 
   // Consulta SQL para obtener las notas filtradas
   const sql = `
-    SELECT a.primerNombre, a.segundoNombre, a.tercerNombre, a.primerApellido, a.segundoApellido, a.claveAlumno, n.nota
+    SELECT n.idNotas, a.primerNombre, a.segundoNombre, a.tercerNombre, a.primerApellido, a.segundoApellido, a.claveAlumno, n.nota
     FROM Alumno a
     INNER JOIN Notas n ON a.idAlumno = n.idAlumno
     WHERE a.idGrado = ? AND a.idSeccion = ? AND n.idCurso = ? AND n.bimestre = ?

@@ -30,14 +30,14 @@ exports.handler = async (event, context) => {
   } = JSON.parse(event.body);
 
   // Validar que todos los campos obligatorios estén presentes
-  if (!primerNombre || !primerApellido || !idGrado || !idSeccion) {
+  if (!primerNombre || !primerApellido || !claveAlumno || !idGrado || !idSeccion || !cicloEscolar) {
     return {
       statusCode: 400,
       body: JSON.stringify({ message: 'Faltan campos obligatorios' }),
     };
   }
 
-  // Consulta para insertar el estudiante
+  // Consulta para insertar el estudiante con el campo "estado" predefinido como 1
   const query = `INSERT INTO Alumno (
     primerNombre,
     segundoNombre,
@@ -47,8 +47,9 @@ exports.handler = async (event, context) => {
     claveAlumno,
     idGrado,
     idSeccion,
-    cicloEscolar
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    cicloEscolar,
+    estado
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`;
 
   const values = [
     primerNombre,
@@ -56,10 +57,10 @@ exports.handler = async (event, context) => {
     tercerNombre || null,
     primerApellido,
     segundoApellido || null,
-    claveAlumno || null,
+    claveAlumno,
     idGrado,
     idSeccion,
-    cicloEscolar || null
+    cicloEscolar
   ];
 
   return new Promise((resolve, reject) => {
