@@ -173,7 +173,7 @@ header.top-bar h1 {
     background-color: #e0e0e0;
 }
 
-.edit-button, .delete-button, .search-button {
+.edit-button, .delete-button {
     padding: 10px 20px;
     background-color: black;
     color: white;
@@ -182,7 +182,6 @@ header.top-bar h1 {
     cursor: pointer;
 }
 
-/* Botón de navegación */
 .nav-toggle {
     background-color: #ffffff;
     border: none;
@@ -199,7 +198,132 @@ header.top-bar h1 {
     outline: none;
 }
 
-/* Ajustes para dispositivos móviles */
+.modal {
+    visibility: hidden; /* No visible al cargar */
+    opacity: 0; /* Totalmente transparente */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: visibility 0s, opacity 0.5s ease; /* Transición suave */
+}
+
+/* Cuando se activa el modal */
+.modal.show {
+    visibility: visible; /* Se hace visible */
+    opacity: 1; /* Aparece con opacidad completa */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.modal-content input {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modal-content .save-button, .modal-content .cancel-button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Modal de eliminación */
+#deleteModal {
+    visibility: hidden; /* Oculto al inicio */
+    opacity: 0; /* Transparente */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: visibility 0s, opacity 0.5s ease; /* Transición suave */
+}
+
+#deleteModal.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-content-delete {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+}
+
+.modal-content-delete h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.modal-content-delete .student-info {
+    margin-bottom: 20px;
+    text-align: left;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content-delete .student-info p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.modal-content-delete .cancel-button-delete, .modal-content-delete .delete-button-confirm {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content-delete .cancel-button-delete:hover, .modal-content-delete .delete-button-confirm:hover {
+    background-color: #444;
+}
+
 @media screen and (max-width: 768px) {
     .container {
         flex-direction: row;
@@ -220,7 +344,7 @@ header.top-bar h1 {
 
     .parameters-container .parameter {
         display: flex;
-        flex-direction: column; /* Apilar label y select uno sobre otro */
+        flex-direction: column;
         width: 100%;
     }
 
@@ -232,5 +356,13 @@ header.top-bar h1 {
     .search-button {
         width: auto;
         align-self: flex-start;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+
+    .modal-content-delete {
+        width: 90%;
     }
 }

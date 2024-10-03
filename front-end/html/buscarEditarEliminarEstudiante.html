@@ -48,14 +48,14 @@
                 <div class="parameter">
                     <label for="grade">Grado:</label>
                     <select id="grade">
-                        <!-- Agregar más opciones según sea necesario -->
+                        <!-- Opciones dinámicas -->
                     </select>
                 </div>
 
                 <div class="parameter">
                     <label for="section">Sección:</label>
                     <select id="section">
-                        <!-- Agregar más opciones según sea necesario -->
+                        <!-- Opciones dinámicas -->
                     </select>
                 </div>
 
@@ -68,66 +68,66 @@
                 <thead>
                     <tr>
                         <th>Estudiante</th>
-                        <th>Clave</th> <!-- Columna sin nombre -->
-                        <th></th> <!-- Columna sin nombre -->
-                        <th></th> <!-- Columna sin nombre -->
+                        <th>Correo</th>
+                        <th>Clave</th>
+                        <th></th> <!-- Columna para editar -->
+                        <th></th> <!-- Columna para dar de baja -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Juan Carlos Pérez Rodríguez</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>María Fernanda Gómez López</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>Carlos Alberto Sánchez García</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>Lucía Isabel Fernández Díaz</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>Pedro Antonio Ramírez Torres</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>Sofía Alejandra Martínez Ríos</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>Diego Javier Torres Romero</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>Isabel Patricia Castillo Ruiz</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>Miguel Ángel Ortega González</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
-                    <tr>
-                        <td>Valeria Paola Ruiz Rodríguez</td>
-                        <td><button class="edit-button">Editar</button></td>
-                        <td><button class="delete-button">Dar de Baja</button></td>
-                    </tr>
+                    <!-- Filas generadas dinámicamente -->
                 </tbody>
             </table>
         </main>
     </div>
+
+    <!-- Ventana emergente (modal) para editar estudiante -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Editar Estudiante</h2>
+            <form id="edit-form">
+                <label for="edit-primerNombre">Primer Nombre:</label>
+                <input type="text" id="edit-primerNombre" required>
+                
+                <label for="edit-segundoNombre">Segundo Nombre:</label>
+                <input type="text" id="edit-segundoNombre">
+                
+                <label for="edit-tercerNombre">Tercer Nombre:</label>
+                <input type="text" id="edit-tercerNombre">
+                
+                <label for="edit-primerApellido">Primer Apellido:</label>
+                <input type="text" id="edit-primerApellido" required>
+                
+                <label for="edit-segundoApellido">Segundo Apellido:</label>
+                <input type="text" id="edit-segundoApellido">
+                
+                <label for="edit-correoElectronico">Correo Electrónico:</label>
+                <input type="email" id="edit-correoElectronico" required>
+                
+                <button type="button" class="save-button">Guardar cambios</button>
+                <button type="button" class="cancel-button">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Nuevo modal para eliminar estudiante -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content-delete">
+            <h2>¿Desea eliminar este estudiante?</h2>
+            <div class="student-info">
+                <p><strong>Primer Nombre:</strong> <span id="delete-primerNombre"></span></p>
+                <p><strong>Segundo Nombre:</strong> <span id="delete-segundoNombre"></span></p>
+                <p><strong>Tercer Nombre:</strong> <span id="delete-tercerNombre"></span></p>
+                <p><strong>Primer Apellido:</strong> <span id="delete-primerApellido"></span></p>
+                <p><strong>Segundo Apellido:</strong> <span id="delete-segundoApellido"></span></p>
+                <p><strong>Correo Electrónico:</strong> <span id="delete-correoElectronico"></span></p>
+                <p><strong>Clave:</strong> <span id="delete-claveAlumno"></span></p>
+            </div>
+            <button class="cancel-button-delete">Cancelar</button>
+            <button class="delete-button-confirm">Eliminar</button>
+        </div>
+    </div>
+
     <script src="../js/buscarEditarEliminarEstudiante.js"></script>
 </body>
 </html>

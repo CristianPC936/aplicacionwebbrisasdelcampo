@@ -70,10 +70,11 @@ async function registrarEstudiante(event) {
     const claveAlumno = document.getElementById('clave').value;
     const idGrado = document.getElementById('grado').value;
     const idSeccion = document.getElementById('seccion').value;
+    const correoElectronico = document.getElementById('correoElectronico').value; // Nuevo campo de correo electrónico
     const cicloEscolar = new Date().getFullYear(); // Obtener el año en curso
 
     // Validar que los campos requeridos no estén vacíos
-    if (!primerNombre || !primerApellido || !claveAlumno || !idGrado || !idSeccion || !cicloEscolar) {
+    if (!primerNombre || !primerApellido || !claveAlumno || !idGrado || !idSeccion || !cicloEscolar || !correoElectronico) {
         alert("Por favor, llene todos los campos obligatorios.");
         return;
     }
@@ -99,6 +100,13 @@ async function registrarEstudiante(event) {
         return;
     }
 
+    // Validar formato de correo electrónico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(correoElectronico)) {
+        alert("Por favor, ingrese un correo electrónico válido.");
+        return;
+    }
+
     // Crear el documento JSON
     const estudiante = {
         primerNombre: primerNombre,
@@ -109,7 +117,8 @@ async function registrarEstudiante(event) {
         claveAlumno: parseInt(claveAlumno),
         idGrado: parseInt(idGrado),
         idSeccion: parseInt(idSeccion),
-        cicloEscolar: cicloEscolar
+        cicloEscolar: cicloEscolar,
+        correoElectronico: correoElectronico // Añadido al objeto JSON
     };
 
     // Realizar la solicitud fetch para registrar el estudiante

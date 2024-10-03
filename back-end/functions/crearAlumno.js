@@ -26,11 +26,12 @@ exports.handler = async (event, context) => {
     claveAlumno,
     idGrado,
     idSeccion,
-    cicloEscolar
+    cicloEscolar,
+    correoElectronico // Nuevo parámetro
   } = JSON.parse(event.body);
 
   // Validar que todos los campos obligatorios estén presentes
-  if (!primerNombre || !primerApellido || !claveAlumno || !idGrado || !idSeccion || !cicloEscolar) {
+  if (!primerNombre || !primerApellido || !claveAlumno || !idGrado || !idSeccion || !cicloEscolar || !correoElectronico) {
     return {
       statusCode: 400,
       body: JSON.stringify({ message: 'Faltan campos obligatorios' }),
@@ -48,8 +49,9 @@ exports.handler = async (event, context) => {
     idGrado,
     idSeccion,
     cicloEscolar,
+    correoElectronico,  -- Se incluye el correo en la base de datos
     estado
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`;
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`;
 
   const values = [
     primerNombre,
@@ -60,7 +62,8 @@ exports.handler = async (event, context) => {
     claveAlumno,
     idGrado,
     idSeccion,
-    cicloEscolar
+    cicloEscolar,
+    correoElectronico // Se agrega a los valores
   ];
 
   return new Promise((resolve, reject) => {
