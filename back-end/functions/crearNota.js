@@ -10,6 +10,30 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
+  // Habilitar CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    // Responder a la solicitud OPTIONS (preflight)
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: 'Preflight check successful' }),
+    };
+  }
+
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ message: 'Método no permitido' }),
+    };
+  }
+
   const data = JSON.parse(event.body); // Parsear los datos de la solicitud POST
   const notas = data.notas; // Lista de notas a registrar
 
@@ -25,11 +49,13 @@ exports.handler = async (event, context) => {
       if (error) {
         reject({
           statusCode: 500,
+          headers,
           body: JSON.stringify({ error: 'Error al registrar las notas: ' + error })
         });
       } else {
         resolve({
           statusCode: 200,
+          headers,
           body: JSON.stringify({ message: 'Notas registradas exitosamente', result })
         });
       }

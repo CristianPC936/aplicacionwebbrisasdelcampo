@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 
+// Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
   host: 'serveo.net',
   user: 'root',
@@ -9,9 +10,26 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
+  // Habilitar CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    // Responder a la solicitud OPTIONS antes de una solicitud POST
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: 'Preflight check successful' }),
+    };
+  }
+
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ message: 'Método no permitido' }),
     };
   }
@@ -27,13 +45,14 @@ exports.handler = async (event, context) => {
     idGrado,
     idSeccion,
     cicloEscolar,
-    correoElectronico // Nuevo parámetro
+    correoElectronico, // Nuevo parámetro
   } = JSON.parse(event.body);
 
   // Validar que todos los campos obligatorios estén presentes
   if (!primerNombre || !primerApellido || !claveAlumno || !idGrado || !idSeccion || !cicloEscolar || !correoElectronico) {
     return {
       statusCode: 400,
+      headers,
       body: JSON.stringify({ message: 'Faltan campos obligatorios' }),
     };
   }
@@ -63,7 +82,7 @@ exports.handler = async (event, context) => {
     idGrado,
     idSeccion,
     cicloEscolar,
-    correoElectronico // Se agrega a los valores
+    correoElectronico, // Se agrega a los valores
   ];
 
   return new Promise((resolve, reject) => {
@@ -72,11 +91,13 @@ exports.handler = async (event, context) => {
         console.error('Error al registrar el estudiante:', error);
         resolve({
           statusCode: 500,
+          headers,
           body: JSON.stringify({ message: 'Error al registrar el estudiante' }),
         });
       } else {
         resolve({
           statusCode: 200,
+          headers,
           body: JSON.stringify({ message: 'Estudiante registrado exitosamente', idAlumno: results.insertId }),
         });
       }

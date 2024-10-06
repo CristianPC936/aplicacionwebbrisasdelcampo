@@ -10,6 +10,30 @@ const dbConfig = {
 };
 
 exports.handler = async (event, context) => {
+    // Habilitar CORS
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+    };
+
+    if (event.httpMethod === 'OPTIONS') {
+        // Responder a la solicitud OPTIONS (preflight)
+        return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify({ message: 'Preflight check successful' }),
+        };
+    }
+
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            headers,
+            body: JSON.stringify({ message: 'Método no permitido' }),
+        };
+    }
+
     const connection = mysql.createConnection(dbConfig);
 
     const { notas } = JSON.parse(event.body);
@@ -41,6 +65,7 @@ exports.handler = async (event, context) => {
 
         return {
             statusCode: 200,
+            headers,
             body: JSON.stringify({ message: 'Notas actualizadas correctamente' })
         };
     } catch (error) {
@@ -48,6 +73,7 @@ exports.handler = async (event, context) => {
         connection.end();
         return {
             statusCode: 500,
+            headers,
             body: JSON.stringify({ message: 'Error actualizando las notas' })
         };
     }

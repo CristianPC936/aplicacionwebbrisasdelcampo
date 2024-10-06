@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 
+// Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
   host: 'serveo.net',
   user: 'root',
@@ -9,9 +10,26 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
+  // Habilitar CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    // Responder a la solicitud OPTIONS (preflight)
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: 'Preflight check successful' }),
+    };
+  }
+
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ message: 'Método no permitido' }),
     };
   }
@@ -26,7 +44,7 @@ exports.handler = async (event, context) => {
     correoElectronico,
   } = JSON.parse(event.body);
 
-  // Query to update student information
+  // Query para actualizar la información del estudiante
   const query = `UPDATE Alumno SET primerNombre = ?, segundoNombre = ?, tercerNombre = ?, primerApellido = ?, segundoApellido = ?, correoElectronico = ? WHERE idAlumno = ?`;
   const values = [
     primerNombre,
@@ -44,11 +62,13 @@ exports.handler = async (event, context) => {
         console.error('Error al actualizar el estudiante:', error);
         resolve({
           statusCode: 500,
+          headers,
           body: JSON.stringify({ message: 'Error al actualizar el estudiante' }),
         });
       } else {
         resolve({
           statusCode: 200,
+          headers,
           body: JSON.stringify({ message: 'Estudiante actualizado exitosamente' }),
         });
       }

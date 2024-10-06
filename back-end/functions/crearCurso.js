@@ -9,9 +9,26 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
+  // Habilitar CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    // Responder a la solicitud OPTIONS (preflight)
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: 'Preflight check successful' }),
+    };
+  }
+
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ message: 'Método no permitido' }),
     };
   }
@@ -22,6 +39,7 @@ exports.handler = async (event, context) => {
   if (!nombreCurso) {
     return {
       statusCode: 400,
+      headers,
       body: JSON.stringify({ message: 'El nombre del curso es obligatorio' }),
     };
   }
@@ -35,11 +53,13 @@ exports.handler = async (event, context) => {
         console.error('Error al registrar el curso:', error);
         resolve({
           statusCode: 500,
+          headers,
           body: JSON.stringify({ message: 'Error al registrar el curso' }),
         });
       } else {
         resolve({
           statusCode: 200,
+          headers,
           body: JSON.stringify({ message: 'Curso registrado exitosamente', idCurso: results.insertId }),
         });
       }

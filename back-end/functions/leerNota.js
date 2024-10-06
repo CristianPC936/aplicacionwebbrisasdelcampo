@@ -10,6 +10,22 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
+  // Habilitar CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    // Responder a la solicitud OPTIONS (preflight)
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: 'Preflight check successful' }),
+    };
+  }
+
   // Obtener los parámetros de la solicitud (idCurso, bimestre, idGrado, idSeccion)
   const { idCurso, bimestre, idGrado, idSeccion } = event.queryStringParameters;
 
@@ -17,6 +33,7 @@ exports.handler = async (event, context) => {
   if (!idCurso || !bimestre || !idGrado || !idSeccion) {
     return {
       statusCode: 400,
+      headers,
       body: JSON.stringify({ error: 'idCurso, bimestre, idGrado, y idSeccion son necesarios' })
     };
   }
@@ -35,11 +52,13 @@ exports.handler = async (event, context) => {
       if (error) {
         reject({
           statusCode: 500,
+          headers,
           body: JSON.stringify({ error: 'Error al obtener las notas: ' + error })
         });
       } else {
         resolve({
           statusCode: 200,
+          headers,
           body: JSON.stringify(results) // Devolver los resultados en formato JSON
         });
       }

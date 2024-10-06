@@ -19,12 +19,22 @@ exports.handler = async (event, context) => {
       if (error) {
         reject({
           statusCode: 500,
+          headers: {
+            'Access-Control-Allow-Origin': '*',  // Permitir solicitudes desde cualquier origen
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',  // Métodos permitidos
+            'Access-Control-Allow-Headers': 'Content-Type'  // Encabezados permitidos
+          },
           body: JSON.stringify({ error: 'Error al obtener los grados: ' + error })
         });
       } else {
         resolve({
           statusCode: 200,
-          body: JSON.stringify(results) // Devolver los resultados en formato JSON
+          headers: {
+            'Access-Control-Allow-Origin': '*',  // Permitir solicitudes desde cualquier origen
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',  // Métodos permitidos
+            'Access-Control-Allow-Headers': 'Content-Type'  // Encabezados permitidos
+          },
+          body: JSON.stringify(results)  // Devolver los resultados en formato JSON
         });
       }
     });

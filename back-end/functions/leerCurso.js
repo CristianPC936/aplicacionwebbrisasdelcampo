@@ -10,6 +10,22 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
+  // Habilitar CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    // Responder a la solicitud OPTIONS (preflight)
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: 'Preflight check successful' }),
+    };
+  }
+
   // Obtener el parámetro idGrado de la solicitud
   const { idGrado } = event.queryStringParameters;
 
@@ -17,6 +33,7 @@ exports.handler = async (event, context) => {
   if (!idGrado) {
     return {
       statusCode: 400,
+      headers,
       body: JSON.stringify({ error: 'El parámetro idGrado es necesario' })
     };
   }
@@ -35,11 +52,13 @@ exports.handler = async (event, context) => {
       if (error) {
         reject({
           statusCode: 500,
+          headers,
           body: JSON.stringify({ error: 'Error al obtener los cursos: ' + error })
         });
       } else {
         resolve({
           statusCode: 200,
+          headers,
           body: JSON.stringify(results) // Devolver los resultados en formato JSON
         });
       }

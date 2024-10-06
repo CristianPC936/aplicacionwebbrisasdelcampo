@@ -10,6 +10,22 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
+  // Habilitar CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    // Responder a la solicitud OPTIONS (preflight)
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: 'Preflight check successful' }),
+    };
+  }
+
   // Obtener los parámetros de la solicitud (idGrado, idSeccion, cicloEscolar)
   const { idGrado, idSeccion, cicloEscolar } = event.queryStringParameters;
 
@@ -17,12 +33,13 @@ exports.handler = async (event, context) => {
   if (!idGrado || !idSeccion || !cicloEscolar) {
     return {
       statusCode: 400,
+      headers,
       body: JSON.stringify({ error: 'idGrado, idSeccion y cicloEscolar son necesarios' })
     };
   }
 
-    // Consulta SQL para obtener los alumnos filtrados por idGrado, idSeccion y cicloEscolar
-    const sql = `SELECT idAlumno, primerNombre, segundoNombre, tercerNombre, primerApellido, segundoApellido, claveAlumno, correoElectronico
+  // Consulta SQL para obtener los alumnos filtrados por idGrado, idSeccion y cicloEscolar
+  const sql = `SELECT idAlumno, primerNombre, segundoNombre, tercerNombre, primerApellido, segundoApellido, claveAlumno, correoElectronico
                FROM Alumno 
                WHERE idGrado = ? AND idSeccion = ? AND cicloEscolar = ? AND estado = 1`;
 
@@ -32,11 +49,13 @@ exports.handler = async (event, context) => {
       if (error) {
         reject({
           statusCode: 500,
+          headers,
           body: JSON.stringify({ error: 'Error al obtener los alumnos: ' + error })
         });
       } else {
         resolve({
           statusCode: 200,
+          headers,
           body: JSON.stringify(results) // Devolver los resultados en formato JSON
         });
       }

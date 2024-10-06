@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 
+// Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
   host: 'serveo.net',
   user: 'root',
@@ -9,9 +10,26 @@ const connection = mysql.createConnection({
 });
 
 exports.handler = async (event, context) => {
+  // Habilitar CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (event.httpMethod === 'OPTIONS') {
+    // Responder a la solicitud OPTIONS antes de una solicitud POST
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: 'Preflight check successful' }),
+    };
+  }
+
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ message: 'Método no permitido' }),
     };
   }
@@ -22,6 +40,7 @@ exports.handler = async (event, context) => {
   if (!asistencias || !Array.isArray(asistencias)) {
     return {
       statusCode: 400,
+      headers,
       body: JSON.stringify({ message: 'La solicitud debe contener un array de asistencias' }),
     };
   }
@@ -31,6 +50,7 @@ exports.handler = async (event, context) => {
     if (!asistencia.idAlumno || !asistencia.idtipoAsistencia || !asistencia.fecha) {
       return {
         statusCode: 400,
+        headers,
         body: JSON.stringify({ message: 'Cada asistencia debe contener idAlumno, idtipoAsistencia y fecha' }),
       };
     }
@@ -48,11 +68,13 @@ exports.handler = async (event, context) => {
         console.error('Error al registrar las asistencias:', error);
         resolve({
           statusCode: 500,
+          headers,
           body: JSON.stringify({ message: 'Error al registrar las asistencias' }),
         });
       } else {
         resolve({
           statusCode: 200,
+          headers,
           body: JSON.stringify({ message: `${results.affectedRows} asistencias registradas exitosamente` }),
         });
       }
