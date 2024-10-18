@@ -45,11 +45,19 @@ exports.handler = async (event, context) => {
     idGrado,
     idSeccion,
     cicloEscolar,
-    correoElectronico, // Nuevo parámetro
+    correoElectronico,
   } = JSON.parse(event.body);
 
+  // Capitalizar los nombres y apellidos
+  const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  const primerNombreCap = capitalize(primerNombre);
+  const segundoNombreCap = segundoNombre ? capitalize(segundoNombre) : null;
+  const tercerNombreCap = tercerNombre ? capitalize(tercerNombre) : null;
+  const primerApellidoCap = capitalize(primerApellido);
+  const segundoApellidoCap = segundoApellido ? capitalize(segundoApellido) : null;
+
   // Validar que todos los campos obligatorios estén presentes
-  if (!primerNombre || !primerApellido || !claveAlumno || !idGrado || !idSeccion || !cicloEscolar || !correoElectronico) {
+  if (!primerNombreCap || !primerApellidoCap || !claveAlumno || !idGrado || !idSeccion || !cicloEscolar || !correoElectronico) {
     return {
       statusCode: 400,
       headers,
@@ -57,50 +65,124 @@ exports.handler = async (event, context) => {
     };
   }
 
-  // Consulta para insertar el estudiante con el campo "estado" predefinido como 1
-  const query = `INSERT INTO Alumno (
-    primerNombre,
-    segundoNombre,
-    tercerNombre,
-    primerApellido,
-    segundoApellido,
-    claveAlumno,
+  // Verificar si el estudiante ya está registrado en el mismo idGrado, idSeccion y cicloEscolar
+  const checkStudentQuery = `
+    SELECT idAlumno FROM Alumno
+    WHERE primerNombre = ? 
+    AND primerApellido = ? 
+    AND idGrado = ? 
+    AND idSeccion = ? 
+    AND cicloEscolar = ?
+  `;
+  
+  const checkStudentValues = [
+    primerNombreCap,
+    primerApellidoCap,
     idGrado,
     idSeccion,
     cicloEscolar,
-    correoElectronico,  -- Se incluye el correo en la base de datos
-    estado
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`;
-
-  const values = [
-    primerNombre,
-    segundoNombre || null,
-    tercerNombre || null,
-    primerApellido,
-    segundoApellido || null,
-    claveAlumno,
-    idGrado,
-    idSeccion,
-    cicloEscolar,
-    correoElectronico, // Se agrega a los valores
   ];
 
   return new Promise((resolve, reject) => {
-    connection.query(query, values, (error, results) => {
+    connection.query(checkStudentQuery, checkStudentValues, (error, results) => {
       if (error) {
-        console.error('Error al registrar el estudiante:', error);
-        resolve({
+        console.error('Error al verificar si el estudiante ya existe:', error);
+        return resolve({
           statusCode: 500,
           headers,
-          body: JSON.stringify({ message: 'Error al registrar el estudiante' }),
-        });
-      } else {
-        resolve({
-          statusCode: 200,
-          headers,
-          body: JSON.stringify({ message: 'Estudiante registrado exitosamente', idAlumno: results.insertId }),
+          body: JSON.stringify({ message: 'Error al verificar si el estudiante ya existe' }),
         });
       }
+
+      if (results.length > 0) {
+        // Si ya existe un estudiante con el mismo nombre, grado, sección y ciclo
+        return resolve({
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ message: 'Ya está inscrito este estudiante' }),
+        });
+      }
+
+      // Nueva consulta para verificar si la claveAlumno ya está en uso en el mismo grado, sección y ciclo escolar
+      const checkClaveQuery = `
+        SELECT idAlumno FROM Alumno
+        WHERE claveAlumno = ? 
+        AND idGrado = ? 
+        AND idSeccion = ? 
+        AND cicloEscolar = ?
+      `;
+      
+      const checkClaveValues = [
+        claveAlumno,
+        idGrado,
+        idSeccion,
+        cicloEscolar,
+      ];
+
+      connection.query(checkClaveQuery, checkClaveValues, (error, results) => {
+        if (error) {
+          console.error('Error al verificar si la clave del alumno ya está en uso:', error);
+          return resolve({
+            statusCode: 500,
+            headers,
+            body: JSON.stringify({ message: 'Error al verificar si la clave del alumno ya está en uso' }),
+          });
+        }
+
+        if (results.length > 0) {
+          // Si ya existe un estudiante con la misma clave en el mismo grado, sección y ciclo escolar
+          return resolve({
+            statusCode: 400,
+            headers,
+            body: JSON.stringify({ message: 'La clave del alumno ya está en uso' }),
+          });
+        }
+
+        // Si no existen conflictos, insertar el nuevo estudiante
+        const insertQuery = `INSERT INTO Alumno (
+          primerNombre,
+          segundoNombre,
+          tercerNombre,
+          primerApellido,
+          segundoApellido,
+          claveAlumno,
+          idGrado,
+          idSeccion,
+          cicloEscolar,
+          correoElectronico,
+          estado
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`;
+
+        const insertValues = [
+          primerNombreCap,
+          segundoNombreCap,
+          tercerNombreCap,
+          primerApellidoCap,
+          segundoApellidoCap,
+          claveAlumno,
+          idGrado,
+          idSeccion,
+          cicloEscolar,
+          correoElectronico,
+        ];
+
+        connection.query(insertQuery, insertValues, (error, results) => {
+          if (error) {
+            console.error('Error al registrar el estudiante:', error);
+            return resolve({
+              statusCode: 500,
+              headers,
+              body: JSON.stringify({ message: 'Error al registrar el estudiante' }),
+            });
+          }
+
+          resolve({
+            statusCode: 200,
+            headers,
+            body: JSON.stringify({ message: 'Estudiante registrado exitosamente', idAlumno: results.insertId }),
+          });
+        });
+      });
     });
   });
 };

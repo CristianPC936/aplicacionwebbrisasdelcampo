@@ -41,7 +41,8 @@ exports.handler = async (event, context) => {
   // Consulta SQL para obtener los alumnos filtrados por idGrado, idSeccion y cicloEscolar
   const sql = `SELECT idAlumno, primerNombre, segundoNombre, tercerNombre, primerApellido, segundoApellido, claveAlumno 
                FROM Alumno 
-               WHERE idGrado = ? AND idSeccion = ? AND cicloEscolar = ? AND estado = 1`;
+               WHERE idGrado = ? AND idSeccion = ? AND cicloEscolar = ? AND estado = 1
+               ORDER BY claveAlumno ASC`;
 
   // Retornar una promesa para manejar la consulta de manera asíncrona
   return new Promise((resolve, reject) => {
